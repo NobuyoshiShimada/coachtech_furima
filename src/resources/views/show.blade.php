@@ -54,14 +54,30 @@
                 <div class="action-buttons">
                     {{-- いいねアイコン --}}
                     <div class="action-buttons__item">
-                        <button class="action-buttons__btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px"
-                                fill="#e3e3e3">
-                                <path
-                                    d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" />
+                        {{-- ログイン中 --}}
+                        @auth
+                            <button class="action-buttons__btn {{ $item->likes()->where('user_id', Auth::id())->exists() ? 'action-buttons_btn--active' : '' }}" id="like-button" data-item-id="{{ $item->id }}">
+                                <svg id="like-icon" xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px"
+                                    fill="#e3e3e3">
+                                    <path
+                                        d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" />
+                                </svg>
+                            </button>
+                        @endauth
+
+                        {{-- ログイン前 --}}
+                        @guest
+                        <a href="{{ route('login') }}" class="action-buttons__btn">
+                            <svg id="like-icon "xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px"
+                                    fill="#e3e3e3">
+                                    <path
+                                        d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" />
                             </svg>
-                        </button>
-                        <span class="action-buttons__count">{{ $item->likes->count() ?? 0 }}</span>
+                        </a>
+                        @endguest
+
+                        {{-- いいねのカウント総数 --}}
+                        <span class="action-buttons__count" id="like-count">{{ $item->likes->count() ?? 0 }}</span>
                     </div>
                     {{-- コメントアイコン --}}
                     <div class="action-buttons__item">
@@ -163,10 +179,57 @@
                             <a href="{{ route('login') }}" class="comment-form__submit-btn">コメントを送信する</a>
                         </div>
                     @endguest
-
                 </section>
-
             </div>
         </div>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    const likeButton = document.getElementById('like-button');
+    const likeIcon = document.getElementById('like-icon');
+    const likeCount = document.getElementById('like-count');
+
+    // 💡 ログインしていない
+    if (!likeButton) return;
+
+    likeButton.addEventListener('click', function () {
+        const itemId = this.getAttribute('data-item-id');
+
+        // 💡 Fetch API を使ってリロードなしでLaravelへPOST送信
+        fetch(`/items/${itemId}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // LaravelのPOST送信に絶対必要なCSRFトークンをヘッダーに乗せます
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(response => {
+            // ログイン切れなどでエラーが起きた場合はログイン画面へ飛ばします
+            if (response.status === 401) {
+                window.location.href = '{{ route("login") }}';
+                return;
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data) return;
+
+            // 💡 コントローラーから返ってきた最新データを元に、画面をリアルタイム書き換え！
+            if (data.isLiked) {
+                // いいね登録された場合：ハートを「赤」に染める
+                likeIcon.setAttribute('fill', '#ff5a5f');
+            } else {
+                // いいね解除された場合：ハートを「薄グレー」に戻す
+                likeIcon.setAttribute('fill', '#e3e3e3');
+            }
+            // 数字を最新の合計数に書き換え
+            likeCount.textContent = data.likesCount;
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+
+    </script>
+
 @endsection

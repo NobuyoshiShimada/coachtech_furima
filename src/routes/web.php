@@ -31,6 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::post('/purchase/{item}', [ItemController::class, 'checkout'])->name('item.checkout');
     Route::get('purchase/success/{item}', [ItemController::class, 'success'])->name('purchase.success');
     Route::get('purchase/cancel/{item}', [ItemController::class, 'cancel'])->name('purchase.cancel');
+    Route::post('/items/{item}/like', [ItemController::class, 'toggleLike'])->name('items.like');
 });
 
 Route::get('items/create',fn() => 'Listing Page')->name('items.create');

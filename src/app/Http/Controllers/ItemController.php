@@ -115,5 +115,27 @@ class ItemController extends Controller
         return redirect()->route('item.purchase', ['item' => $item->id])->with('error', '決済がキャンセルされました');
     }
 
+    public function toggleLike(Item $item) {
+        $user = Auth::user();
 
+        $like = $item->likes()->where('user_id', $user->id)->first();
+
+        if ($like) {
+            // すでにいいねしていれば解除
+            $like->delete();
+            $isLiked = false;
+        }
+        else {
+            // まだいいねしていなければ新規登録
+            $item->likes()->create([
+                'user_id' => $user->id
+            ]);
+            $isLiked = true;
+        }
+
+        return response()->json([
+            'isLiked' => $isLiked,
+            'likesCount' => $item->likes()->count()
+        ]);
+    }
 }
