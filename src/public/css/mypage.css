@@ -10,14 +10,14 @@
 
 .user-profile {
     width: 100%;
-    padding: 50px;
+    padding: 80px;
     background-color: #ffffff;
 }
 
 .user-profile__inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 50px;
+    padding: 0 180px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -27,12 +27,12 @@
 .user-profile__info {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 80px;
 }
 
 .user-profile__avatar {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     background-color: #e0e0e0;
     border-radius: 50%;
     overflow: hidden;
@@ -57,8 +57,8 @@
     border: 1px solid #ff0000;
     color: #ff0000;
     text-decoration: none;
-    padding: 10px 24px;
-    font-size: 14px;
+    padding: 5px 24px;
+    font-size: 18px;
     border-radius: 4px;
     transition: backgroud-color 0.3s, color 0.3s;
 }
@@ -66,4 +66,117 @@
 .user-profile__edit-btn:hover {
     background-color: #ff0000;
     color: #ffffff;
+}
+
+/* タブ */
+.tab-nav {
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 40px;
+}
+
+.tab-nav__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 50px 0 50px;
+    display: flex;
+    gap: 40px;
+}
+
+.tab-nav__link {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333333;
+    text-decoration: none;
+    padding-bottom: 15px;
+    position: relative;
+}
+
+.tab-nav__link--active {
+    color: #ff0000;
+}
+
+.tab-nav__link--active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #ff0000;
+}
+
+/* アイテムグリッド */
+.item-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 50px 50px 50px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 40px;
+    row-gap: 40px;
+    box-sizing: border-box;
+}
+
+/* アイテムカード */
+.item-card {
+    width: 100%;
+}
+
+.item-card__link {
+    text-decoration: none;
+    color: #333333;
+    display: block;
+}
+
+.item-card__image-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.item-card__image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #000000;
+}
+
+.item-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
+/* レスポンシブ768px以下 */
+@media screen and (max-width: 768px) {
+    .user-profile {
+        padding: 30px 0;
+    }
+
+    .user-profile__inner {
+        flex-direction: column;  /* スマホ画面では縦並びに切り替え */
+        gap: 25px;
+        padding: 0 20px;
+        text-align: center;
+    }
+
+    .user-profile__info {
+        flex-direction: column;  /* アバターの下にユーザー名が来るように縦並び */
+        gap: 15px;
+    }
+
+    .user-profile__edit-btn {
+        width: 100%;             /* スマホではボタンを横幅いっぱいに広げる */
+        box-sizing: border-box;
+        text-align: center;
+    }
 }
