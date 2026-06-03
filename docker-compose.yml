@@ -36,8 +36,8 @@ services:
     environment:
       - PMA_ARBITRARY=1
       - PMA_HOST=mysql
-      - PMA_USER=test_mogitate_user
-      - PMA_PASSWORD=test_mogitate_pass
+      - PMA_USER=coachtech_furima_user
+      - PMA_PASSWORD=coachtech_furima_pass
     depends_on:
       - mysql
     ports:

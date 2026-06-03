@@ -1,0 +1,118 @@
+.item-page {
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.tab-nav {
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 40px;
+}
+
+.tab-nav__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 50px 0 50px;
+    display: flex;
+    gap: 40px;
+}
+
+.tab-nav__link {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333333;
+    text-decoration: none;
+    padding-bottom: 15px;
+    position: relative;
+}
+
+.tab-nav__link--active {
+    color: #ff0000;
+}
+
+.tab-nav__link--active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #ff0000;
+}
+
+/* アイテムグリッド */
+.item-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 50px 50px 50px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 40px;
+    row-gap: 40px;
+    box-sizing: border-box;
+}
+
+/* アイテムカード */
+.item-card {
+    width: 100%;
+}
+
+.item-card__link {
+    text-decoration: none;
+    color: #333333;
+    display: block;
+}
+
+.item-card__image-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.item-card__image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #000000;
+}
+
+.item-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* .item-card__price { */
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333333;
+}
+
+/* レスポンシブ対応(1024px以下) */
+
+/* 画面が狭くなったら3列 */
+@media screen and(max-width: 1024px) {
+    .item-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* スマホ */
+@media screen and(max-width: 768px) {
+    .item-grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 20px 40px 20px;
+    }
+    .tav-nav__inner {
+        padding: 20px 20px 0 20px;
+        justify-content: center;
+    }
+}

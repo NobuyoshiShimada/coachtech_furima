@@ -1,0 +1,132 @@
+.profile {
+    background-color: #ffffff;
+    min-height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 60px;
+}
+
+.profile__title {
+    font-size: 24px;
+    font-weight: bold;
+    padding-bottom: 40px;
+    margin: 0;
+}
+
+.profile__form {
+    width: 600px;
+}
+
+/* 画像 */
+.user-image {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.user-image__preview {
+    width: 120px;
+    height: 120px;
+    background-color: #d9d9d9;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-image__preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-image__default {
+    width: 100%;
+    height: 100%;
+    background-color: #d9d9d9;
+}
+
+.user-image__label {
+    padding: 5px 10px;
+    color: #ff0000;
+    border: 1px solid #ff0000;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: backgroud-color 0.3s, color 0.3s;
+}
+
+.user-image__label:hover {
+    background-color: #ff0000;
+    color: #ffffff;
+}
+
+.user-image__input {
+    display: none;
+}
+
+/* form-group */
+.form-group {
+    margin: 0 0 25px 0;
+}
+
+.form-group__label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.form-group__input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    box-sizing: border-box;
+    display: block;
+    font-size: 16px;
+}
+.form-group__error {
+    color: #ff0000;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+/* 更新ボタン */
+.profile__submit-button {
+    width: 100%;
+    background-color: #ff0000;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 30px;
+    box-sizing: border-box;
+    transition: opacity 0.3s;
+}
+
+.profile__submit-button:hover {
+    opacity: 0.8;
+}
+
+/* モバイル用 max-width:768px*/
+@media screen and (max-width: 768px) {
+    .profile {
+        padding-top: 40px;
+    }
+
+    .profile__form {
+        width: 90%;
+    }
+
+    .user-image {
+        flex-direction: column;
+        gap: 20px;
+    }
+}

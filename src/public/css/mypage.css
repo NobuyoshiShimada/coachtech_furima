@@ -1,0 +1,69 @@
+.mypage {
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.mypage .item-grid {
+    padding-top: 40px;
+    padding-bottom: 60px;
+}
+
+.user-profile {
+    width: 100%;
+    padding: 50px;
+    background-color: #ffffff;
+}
+
+.user-profile__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.user-profile__info {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.user-profile__avatar {
+    width: 100px;
+    height: 100px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.user-profile__avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-profile__name {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    color: #333333;
+}
+
+.user-profile__edit-btn {
+    display: inline-block;
+    border: 1px solid #ff0000;
+    color: #ff0000;
+    text-decoration: none;
+    padding: 10px 24px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: backgroud-color 0.3s, color 0.3s;
+}
+
+.user-profile__edit-btn:hover {
+    background-color: #ff0000;
+    color: #ffffff;
+}
