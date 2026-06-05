@@ -70,6 +70,20 @@
     border-radius: 4px;
     overflow: hidden;
     margin-bottom: 12px;
+    position: relative;
+}
+
+.item-card__sold-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #ff0000;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 12px;
+    border-bottom-right-radius: 4px;
+    z-index: 10;
 }
 
 .item-card__image-placeholder {
@@ -89,17 +103,11 @@
     display: block;
 }
 
-/* .item-card__price { */
-    margin: 5px 0 0 0;
-    font-size: 14px;
-    font-weight: bold;
-    color: #333333;
-}
 
 /* レスポンシブ対応(1024px以下) */
 
 /* 画面が狭くなったら3列 */
-@media screen and(max-width: 1024px) {
+@media screen and (max-width: 1024px) {
     .item-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -111,7 +119,7 @@
         grid-template-columns: repeat(2, 1fr);
         padding: 0 20px 40px 20px;
     }
-    .tav-nav__inner {
+    .tab-nav__inner {
         padding: 20px 20px 0 20px;
         justify-content: center;
     }

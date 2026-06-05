@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\PurchaseRequest;
 use App\Http\Requests\AddressRequest;
+use App\Http\Requests\CommentRequest;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
@@ -12,9 +13,9 @@ use Stripe\Checkout\Session;
 
 class ItemController extends Controller
 {
+    // 商品一覧
     public function index(Request $request) {
-        $items = Item::where('status', 'on_sale')->get();
-        $query = Item::where('status', 'on_sale');
+        $query = Item::query();
 
         if ($request->tab ==='mylist' && Auth::check()) {
             $user = Auth::user();
@@ -44,11 +45,13 @@ class ItemController extends Controller
         return view('index', compact('items'));
     }
 
+    // 商品詳細画面
     public function show(Item $item) {
         $item->load(['condition', 'categories']);
         return view('show', compact('item'));
     }
 
+    // 購入画面
     public function purchase(Item $item) {
         $user = Auth::user();
         if ($item->isSold()) {
@@ -57,6 +60,7 @@ class ItemController extends Controller
         return view ('purchase', compact('item', 'user'));
     }
 
+    // 住所変更画面
     public function editAddress(Item $item) {
         $user = Auth::user();
         return view('address',compact('item', 'user'));
@@ -72,6 +76,7 @@ class ItemController extends Controller
         return redirect()->route('item.purchase', ['item' => $item->id]);
     }
 
+    // stripeへ接続
     public function checkout(PurchaseRequest $request, Item $item) {
         $method = $request->input('payment_method');
 
@@ -115,6 +120,7 @@ class ItemController extends Controller
         return redirect()->route('item.purchase', ['item' => $item->id])->with('error', '決済がキャンセルされました');
     }
 
+    // いいね機能
     public function toggleLike(Item $item) {
         $user = Auth::user();
 
@@ -137,5 +143,17 @@ class ItemController extends Controller
             'isLiked' => $isLiked,
             'likesCount' => $item->likes()->count()
         ]);
+    }
+
+    // コメント機能
+    public function storeComment(CommentRequest $request, Item $item) {
+        $user = Auth::user();
+
+        $item->comments()->create([
+            'user_id' => $user->id,
+            'content' => $request->content,
+        ]);
+
+        return redirect()->route('items.show', ['item' => $item->id])->with('message', 'コメントを投稿しました');
     }
 }

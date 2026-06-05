@@ -41,6 +41,9 @@
             <div class="detail-image">
                 <div class="detail-image__wrapper">
                     <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="detail-image__img">
+                    @if ($item->status === 'sold')
+                        <div class="detail-image__sold-badge">SOLD</div>
+                    @endif
                 </div>
             </div>
             {{-- 右側 --}}
@@ -94,16 +97,24 @@
                     </div>
                 </div>
                 {{-- 購入手続きボタン --}}
-                {{-- ログイン中 --}}
-                @auth
-                    <a href="{{ route('item.purchase', ['item' => $item->id]) }}"
-                        class="detail-content__purchase-btn">購入手続きへ</a>
-                @endauth
+                @if ($item->status === 'sold')
+                    <button class="detail-content__purchase-btn detail-content__purchase-btn--sold" disabled>
+                    </button>
+                @else
 
-                {{-- 未ログイン --}}
-                @guest
-                    <a href="{{ route('login') }}" class="detail-content__purchase-btn">購入手続きへ</a>
-                @endguest
+                    {{-- ログイン中 --}}
+                    @auth
+                        <a href="{{ route('item.purchase', ['item' => $item->id]) }}"
+                            class="detail-content__purchase-btn">購入手続きへ</a>
+                    @endauth
+
+                    {{-- 未ログイン --}}
+                    @guest
+                        <a href="{{ route('login') }}" class="detail-content__purchase-btn">購入手続きへ</a>
+                    @endguest
+                @endif
+
+                {{-- ログイン中 --}}
 
 
                 {{-- 商品説明 --}}
@@ -170,7 +181,11 @@
                             class="comment-form">
                             @csrf
                             <textarea name="content" class="comment-form__textarea" rows="6"></textarea>
+                            @error('content')
+                                <div class="error-message">{{ $message }}</div>
+                            @enderror
                             <button type="submit" class="comment-form__submit-btn">コメントを送信する</button>
+
                         </form>
                     @endauth
 

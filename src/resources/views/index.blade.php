@@ -61,6 +61,9 @@
                         <div class="item-card__image-wrapper">
                             {{-- 商品画像 --}}
                             <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="item-card__image">
+                            @if ($item->status === 'sold')
+                            <div class="item-card__sold-badge">SOLD</div>
+                            @endif
                         </div>
                         <div class="item-card__content">
                             <p class="item-card__name">{{ $item->name }}</p>
