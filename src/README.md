@@ -28,8 +28,10 @@ DB_PORT=3306
 DB_DATABASE=test_mogitate_db
 DB_USERNAME=test_mogitate_user
 DB_PASSWORD=test_mogitate_pass
-STRIPE_KEY=pk_test_51TdNvJ9aXCJFeEK4no1Bv4AJgEhGRXFTcMpp1Pg1SirrnTB2a4fSaELlfYD2JD81hnLWhdRHMyIRu1cYJci4YZQg00BxSDnpCX
-STRIPE_SECRET=sk_test_51TdNvJ9aXCJFeEK4C9ScAPSOdgfkeVNCs86NqdlWnQ8Ohnscpk6VcNoevLGay8jbcQzudm3aqlip83Jf9DGVbyKt00x8ZljvW4
+STRIPE_KEY=your_stripe_publishable_key_here
+STRIPE_SECRET=your_stripe_secret_key_here
+
+※ `your_...` の部分には、ご自身のStripeダッシュボードから取得したテスト用のAPIキーを入力してください。
 ```
 
 5. アプリケーションキーの作成

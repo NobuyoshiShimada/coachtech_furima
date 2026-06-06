@@ -19,7 +19,7 @@
             {{-- マイページボタン --}}
             <li class="header__nav-item"><a href="{{ route('mypage') }}" class="header__nav-mypage">マイページ</a></li>
             {{-- 出品ボタン --}}
-            <li class="header__nav-item"><a href="{{ route('items.create') }}" class="header__nav-listing">出品</a></li>
+            <li class="header__nav-item"><a href="{{ route('sell.create') }}" class="header__nav-listing">出品</a></li>
         @endauth
 
         {{-- 未ログイン --}}
@@ -114,9 +114,6 @@
                     @endguest
                 @endif
 
-                {{-- ログイン中 --}}
-
-
                 {{-- 商品説明 --}}
                 <section class="detail-section">
                     <h2 class="detail-section__title">商品説明</h2>
@@ -131,7 +128,6 @@
                         <div class="detail-info__value">
                             @forelse ($item->categories as $category)
                                 <span class="detail-info__badge">{{ $category->name }}</span>
-
                             @empty
                                 <span class="detail-info__badge">未設定</span>
                             @endforelse
@@ -143,7 +139,6 @@
                             {{ $item->condition->name ?? '未設定' }}
                         </div>
                     </div>
-
                 </section>
 
                 {{-- コメント --}}
@@ -160,7 +155,6 @@
                                 <div class="comment-item__content">{{ $comment->content }}
                                 </div>
                             </div>
-
                         @empty
                             <div class="comment-item">
                                 <div class="comment-item__user">

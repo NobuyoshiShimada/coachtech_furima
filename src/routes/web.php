@@ -33,9 +33,11 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('purchase/cancel/{item}', [ItemController::class, 'cancel'])->name('purchase.cancel');
     Route::post('/items/{item}/like', [ItemController::class, 'toggleLike'])->name('items.like');
     Route::post('/items/{item}/comment', [ItemController::class, 'storeComment'])->name('comments.store');
+    Route::get('/sell', [ItemController::class, 'create'])->name('sell.create');
+    Route::post('/sell', [ItemController::class, 'store'])->name('sell.store');
 });
 
-Route::get('items/create',fn() => 'Listing Page')->name('items.create');
+// Route::get('items/create',fn() => 'Listing Page')->name('items.create');
 
 Route::get('/', [ItemController::class,'index'])->name('item.index');
 

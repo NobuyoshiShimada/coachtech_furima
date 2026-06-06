@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PurchaseRequest;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\CommentRequest;
+use App\Http\Requests\ExhibitionRequest;
+use App\Models\Category;
+use App\Models\Condition;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
@@ -156,4 +159,35 @@ class ItemController extends Controller
 
         return redirect()->route('items.show', ['item' => $item->id])->with('message', 'コメントを投稿しました');
     }
+
+    // 商品出品画面
+    public function create() {
+        $categories = Category::all();
+        $conditions = Condition::all();
+
+        return view('sell', compact('categories', 'conditions'));
+    }
+
+    public function store(ExhibitionRequest $request) {
+        $user = Auth::user();
+
+        $path = &request->file('image')->store('items', 'public');
+
+        $item = Item::create([
+            'user_id' => $user->id,
+            'condition_id' => $request->condition_id,
+            'name' => $request->name,
+            'brand' => $request->brand ?? '' ,
+            'price' => $request->price,
+            'description' => $request->description,
+            'image_url' => asset('storage/' . $path),
+            'status' => 'on_sale',
+        ]);
+
+        $item->categories()->attach($request->categories);
+
+        return redirect()->route('mypage')->with('message', '商品を出品しました');
+    }
+
+
 }

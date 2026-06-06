@@ -19,7 +19,7 @@
             {{-- マイページボタン --}}
             <li class="header__nav-item"><a href="{{ route('mypage') }}" class="header__nav-mypage">マイページ</a></li>
             {{-- 出品ボタン --}}
-            <li class="header__nav-item"><a href="{{ route('items.create') }}" class="header__nav-listing">出品</a></li>
+            <li class="header__nav-item"><a href="{{ route('sell.create') }}" class="header__nav-listing">出品</a></li>
         @endauth
 
         {{-- 未ログイン --}}
