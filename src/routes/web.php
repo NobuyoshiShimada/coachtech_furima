@@ -20,10 +20,14 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 // Route::get('/register', [RegisterController::class, 'showRegistrationForm']);
 Route::middleware(['auth', 'verified'])->group(function() {
+
     Route::get('/mypage/profile',[ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/mypage/profile', [ProfileController::class, 'update'])->name('profile.update');
+
     Route::get('/mypage', [ProfileController::class, 'mypage'])->name('mypage');
+
     Route::get('/purchase/{item}', [ItemController::class, 'purchase'])->name('item.purchase');
+
     Route::get('purchase/address/{item}', [ItemController::class, 'editAddress'])->name('address.edit');
     Route::post('purchase/address/{item}', [ItemController::class, 'updateAddress'])->name('address.update');
     Route::get('/?tab=mylist', function() {

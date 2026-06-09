@@ -117,6 +117,10 @@
     color: #333333;
 }
 
+.action-buttons__btn--active svg {
+    fill: #ff0000 !important;
+}
+
 /* 購入手続きボタン */
 .detail-content__purchase-btn {
     display: block;

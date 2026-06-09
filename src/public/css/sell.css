@@ -1,0 +1,139 @@
+.sell-title {
+    font-size: 18px;
+    color: #888888;
+    font-weight: bold;
+    border-bottom: 1px solid #888888;
+    padding-bottom: 10px;
+    margin: 40px 0 20px 0;
+}
+
+/* 商品画像 */
+.image-preview {
+    display: none;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.preview-img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.image-upload-box {
+    width: 100%;
+    height: 120px;
+    border: 2px dashed #cccccc;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fafafa;
+    box-sizing: border-box;
+}
+
+.image-upload-box__input {
+    display: none;
+}
+
+.image-upload-box__button {
+    display: inline-block;
+    border: 1px solid #ff5555;
+    color: #ff5555;
+    padding: 8px 24px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #ffffff;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.image-upload-box__button:hover {
+    background-color: #ff5555;
+    color: #ffffff;
+}
+
+/* カテゴリー選択 */
+.category-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.category-item {
+    cursor: pointer;
+    position: relative;
+}
+
+.category-item__checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.category-item__badge {
+    display: inline-block;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: #ff5555;
+    background-color: #ffffff;
+    border: 1px solid #ff5555;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.category-item:hover
+.category-item__badge {
+    background-color: #ff5555;
+    border-color: #999999;
+    color: #ffffff;
+}
+
+.category-item__checkbox:checked +
+.category-item__badge {
+    background-color: #ff5555;
+    color: #ffffff;
+    border-color: #ff5555;
+}
+
+/* 販売価格 */
+.sell-price {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.sell-price__yen {
+    position: absolute;
+    left: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333333;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.sell-price
+.form-group__input {
+    padding-left: 35px !important;
+    box-sizing: border-box;
+}
+
+/* スピンボタンの消去 */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.

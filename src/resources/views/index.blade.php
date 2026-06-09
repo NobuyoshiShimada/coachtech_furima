@@ -6,7 +6,8 @@
 
 @section('header')
     <form action="/" method="GET" class="header__search">
-        <input type="text" name="keyword"class="header__search--input" placeholder="なにをお探しですか？">
+        <input type="hidden" name="tab" value="{{ request('tab', 'recommend') }}">
+        <input type="text" name="keyword"class="header__search--input" placeholder="なにをお探しですか？" value="{{ request("keyword") }}">
     </form>
     <ul class="header__nav">
         {{-- ログイン中 --}}
@@ -40,15 +41,15 @@
         {{-- タブ切り替え --}}
         <div class="tab-nav">
             <div class="tab-nav__inner">
-                <a href="/?tab=recommend" class="tab-nav__link {{ request('tab') !== 'mylist' ? 'tab-nav__link--active' : '' }}">おすすめ</a>
+                <a href="/?tab=recommend{{ request('keyword') ? '&keyword=' . urlencode(request('keyword')) : '' }}" class="tab-nav__link {{ request('tab') !== 'mylist' ? 'tab-nav__link--active' : '' }}">おすすめ</a>
                 {{-- ログイン中 --}}
                 @auth
-                    <a href="/?tab=mylist" class="tab-nav__link {{ request('tab') === 'mylist' ? 'tab-nav__link--active' : ''}}">マイリスト</a>
+                    <a href="/?tab=mylist{{ request('keyword') ? '&keyword=' . urlencode(request('keyword')) : '' }}" class="tab-nav__link {{ request('tab') === 'mylist' ? 'tab-nav__link--active' : ''}}">マイリスト</a>
                 @endauth
 
                 {{-- ログイン前 --}}
                 @guest
-                    <a href="{{ route('login') }}" class="tab-nav__link">マイリスト</a>
+                    <a href="/?tab=mylist" class="tab-nav__link {{ request('tab') === 'mylist' ? 'tab-nav__link--active' : ''}}">マイリスト</a>
                 @endguest
             </div>
         </div>

@@ -6,7 +6,7 @@
 
 @section('header')
     <form action="/" method="GET" class="header__search">
-        <input type="text" name="keyword"class="header__search--input" placeholder="なにをお探しですか？">
+        <input type="text" name="keyword"class="header__search--input" placeholder="なにをお探しですか？" value="{{ request("keyword") }}">
     </form>
     <ul class="header__nav">
         {{-- ログイン中 --}}
@@ -60,7 +60,7 @@
                         {{-- ログイン中 --}}
                         @auth
                             <button
-                                class="action-buttons__btn {{ $item->likes()->where('user_id', Auth::id())->exists() ? 'action-buttons_btn--active' : '' }}"
+                                class="action-buttons__btn {{ $item->likes()->where('user_id', Auth::id())->exists() ? 'action-buttons__btn--active' : '' }}"
                                 id="like-button" data-item-id="{{ $item->id }}">
                                 <svg id="like-icon" xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960"
                                     width="35px" fill="#e3e3e3">

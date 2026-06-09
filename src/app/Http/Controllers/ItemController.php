@@ -20,38 +20,44 @@ class ItemController extends Controller
     public function index(Request $request) {
         $query = Item::query();
 
-        if ($request->tab ==='mylist' && Auth::check()) {
-            $user = Auth::user();
-
-            $items = Item::whereHas('likes', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })->where('status', 'on_sale')->get();
+        if (Auth::check()) {
+            $query->where('user_id', '!=', Auth::id());
         }
+
+        $keyword = $request->keyword;
 
         if ($request->filled('keyword')) {
             $keyword = $request->keyword;
 
             $query->where(function($q) use ($keyword) {
-                $q->where('name', 'LIKE', "%{$keyword}%")->orWhere('description', 'LIKE', "%{$keyword}%");
+                $q->where('name', 'LIKE', "%{$keyword}%")
+                ->orWhere('description', 'LIKE', "%{$keyword}%");
             });
         }
 
-        if ($request->tab === 'mylist' && Auth::check()) {
-            $user = Auth::user();
-            $query->whereHas('likes', function($q) use ($user){
-                $q->where('user_id', $user->id);
+        if ($request->tab === 'mylist') {
+            if(Auth::check()) {
+            $query->whereHas('likes', function($q) {
+                $q->where('user_id', Auth::id());
             });
+        } else {
+            $query->where('id', -1);
         }
-
+        }
         $items = $query->get();
 
-        return view('index', compact('items'));
+        return view('index', compact('items', 'keyword'));
     }
 
     // 商品詳細画面
     public function show(Item $item) {
         $item->load(['condition', 'categories']);
-        return view('show', compact('item'));
+
+        $isLiked = false;
+        if (Auth::check()) {
+            $isLiked = $item->likes()->where('user_id', Auth::id())->exists();
+        }
+        return view('show', compact('item', 'isLiked'));
     }
 
     // 購入画面
@@ -115,7 +121,14 @@ class ItemController extends Controller
     }
 
     public function success(Item $item) {
+        $user = Auth::user();
+
         $item->update(['status' => 'sold']);
+
+        $item->order()->create([
+            'user_id' => $user->id,
+        ]);
+
         return redirect()->route('item.index')->with('message', '商品を購入しました');
     }
 
@@ -171,7 +184,7 @@ class ItemController extends Controller
     public function store(ExhibitionRequest $request) {
         $user = Auth::user();
 
-        $path = &request->file('image')->store('items', 'public');
+        $path = $request->file('image')->store('items', 'public');
 
         $item = Item::create([
             'user_id' => $user->id,

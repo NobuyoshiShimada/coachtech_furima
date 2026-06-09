@@ -34,10 +34,10 @@ document.addEventListener('DOMContentLoaded', function () {
             // 💡 コントローラーから返ってきた最新データを元に、画面をリアルタイム書き換え！
             if (data.isLiked) {
                 // いいね登録された場合：ハートを「赤」に染める
-                likeIcon.setAttribute('fill', '#ff5a5f');
+                this.classList.add('action-buttons__btn--active');
             } else {
                 // いいね解除された場合：ハートを「薄グレー」に戻す
-                likeIcon.setAttribute('fill', '#e3e3e3');
+                this.classList.remove('action-buttons__btn--active');
             }
             // 数字を最新の合計数に書き換え
             likeCount.textContent = data.likesCount;

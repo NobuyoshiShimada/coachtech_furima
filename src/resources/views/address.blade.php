@@ -6,7 +6,7 @@
 
 @section('header')
     <form action="/" method="GET" class="header__search">
-        <input type="text" name="keyword"class="header__search--input" placeholder="なにをお探しですか？">
+        <input type="text" name="keyword"class="header__search--input" placeholder="なにをお探しですか？" value="{{ request("keyword") }}">
     </form>
     <ul class="header__nav">
         {{-- ログアウトボタン --}}

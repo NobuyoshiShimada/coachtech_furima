@@ -7,7 +7,7 @@
 
 @section('header')
     <form action="/" method="GET" class="header__search">
-        <input type="text" name="keyword"class="header__search--input" placeholder="なにをお探しですか？">
+        <input type="text" name="keyword"class="header__search--input" placeholder="なにをお探しですか？" value="{{ request("keyword") }}">
     </form>
     <ul class="header__nav">
         {{-- ログイン中 --}}
@@ -46,10 +46,12 @@
             {{-- 商品画像 --}}
             <div class="form-group">
                 <label class="form-group__label">商品画像</label>
+                <div class="image-preview" id="image-preview">
+                    <img src="" alt="preview" class="preview-img" id="preview-img">
+                </div>
                 <div class="image-upload-box">
-                    <input type="file" name="image" id="item-image" class="image-upload-box__input" accept="image/*"
-                        required>
-                    <label for="item-image" class="item-image-box__button">画像を選択する</label>
+                    <input type="file" name="image" id="item-image" class="image-upload-box__input" accept="image/*">
+                    <label for="item-image" class="image-upload-box__button">画像を選択する</label>
                 </div>
                 @error('image')
                     <div class="form-group__error">{{ $message }}</div>
@@ -79,7 +81,7 @@
             {{-- 商品の状態 --}}
             <div class="form-group">
                 <label for="condition_id" class="form-group__label">商品の状態</label>
-                <select name="condition_id" id="condition_id" class="form-group__input" required>
+                <select name="condition_id" id="condition_id" class="form-group__input">
                     <option value="" disabled selected>選択してください</option>
                     @foreach ($conditions as $condition)
                         <option value="{{ $condition->id }}"
@@ -96,8 +98,7 @@
             {{-- 商品名 --}}
             <div class="form-group">
                 <label for="name" class="form-group__label">商品名</label>
-                <input type="text" name="name" id="name" class="form-group__input" value="{{ old('name') }}"
-                    required>
+                <input type="text" name="name" id="name" class="form-group__input" value="{{ old('name') }}">
                 @error('name')
                     <div class="form-group__error">{{ $message }}</div>
                 @enderror
@@ -112,7 +113,7 @@
             {{-- 商品の説明 --}}
             <div class="form-group">
                 <label for="description" class="form-group__label">商品の説明</label>
-                <textarea name="description" id="description" class="form-group__input" rows="6" required>{{ old('description') }}</textarea>
+                <textarea name="description" id="description" class="form-group__input" rows="6">{{ old('description') }}</textarea>
                 @error('description')
                     <div class="form-group__error">{{ $message }}</div>
                 @enderror
@@ -124,7 +125,7 @@
                 <div class="sell-price">
                     <span class="sell-price__yen">¥</span>
                     <input type="number" name="price" id="price" class="form-group__input"
-                        value="{{ old('price') }}" required>
+                        value="{{ old('price') }}">
                 </div>
                 @error('price')
                     <div class="form-group__error">{{ $message }}</div>
@@ -136,5 +137,5 @@
 
         </form>
     </div>
-    <script src="{{ asset('js/profile.js') }}"></script>
+    <script src="{{ asset('js/sell.js') }}"></script>
 @endsection
