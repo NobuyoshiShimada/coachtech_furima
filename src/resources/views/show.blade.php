@@ -108,7 +108,7 @@
                             class="detail-content__purchase-btn">購入手続きへ</a>
                     @endauth
 
-                    {{-- 未ログイン --}}
+                    {{-- ログイン前 --}}
                     @guest
                         <a href="{{ route('login') }}" class="detail-content__purchase-btn">購入手続きへ</a>
                     @endguest

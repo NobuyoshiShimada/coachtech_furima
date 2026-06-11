@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\Category;
 use App\Models\Condition;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminateupport\Facadestorage;
 use Tests\TestCase;
 
 class CoachtechFurimaTest extends TestCase
@@ -87,15 +88,15 @@ class CoachtechFurimaTest extends TestCase
     /** @test */
     public function 会員登録_全ての項目が入力されている場合、会員情報が登録され、プロフィール設定画面に遷移される()
     {
-         $response = $this->post('/register', [
-             'name' => 'テストユーザー',
-             'email' => 'newuser@example.com',
-             'password' => 'password123',
-         'password_confirmation' => 'password123',
-         ]);
+        $response = $this->post('/register', [
+            'name' => 'テストユーザー',
+            'email' => 'newuser@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ]);
 
-         $response->assertRedirect('/mypage/profile');
-         $this->assertDatabaseHas('users', ['email' => 'newuser@example.com']);
+        $response->assertRedirect('/mypage/profile');
+        $this->assertDatabaseHas('users', ['email' => 'newuser@example.com']);
 
     }
 
@@ -256,7 +257,6 @@ class CoachtechFurimaTest extends TestCase
     public function マイリスト_購入済み商品は_Sold_と表示される()
     {
         $user = User::factory()->create();
-
         $onSaleItem = Item::factory()->create(['name' => 'まだ買える商品', 'status' => 'on_sale']);
         $soldItem = Item::factory()->create(['name' => '売り切れた商品', 'status' => 'sold']);
 
@@ -489,21 +489,225 @@ class CoachtechFurimaTest extends TestCase
     // 10.商品購入
 
     /** @test */
-    public function 商品購入_購入するボタンを押下すると購入が完了し、商品一覧画面にてSoldと表示され_プロフィール購入一覧に追加される()
+    public function 商品購入_購入するボタンを押下すると購入が完了する()
     {
         $user = User::factory()->create();
-
         $item = Item::factory()->create([
-            'name' => 'テスト購入スニーカー',
+            'name' => 'テスト商品',
             'status' => 'on_sale',
             ]);
 
+        $response = $this->actingAs($user)->get("purchase/success/{$item->id}");
 
-        $response = $this->actingAs($user)->post("/items/{$item->id}/comment", [
-            'content' => $longComment
+        $response->assertRedirect(route('item.index'));
+        $this->assertDatabaseHas('orders', [
+            'user_id' => $user->id,
+            'item_id' => $item->id
+        ]);
+        $this->assertEquals('sold',$item->fresh()->status);
+    }
+
+    /** @test */
+    public function 商品購入_購入した商品は商品一覧画面にてSoldと表示される()
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create([
+            'name' => '売り切れた商品',
+            'status' => 'sold',
+            ]);
+
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+        $response->assertSee('SOLD');
+    }
+
+    /** @test */
+    public function 商品購入_プロフィール購入した商品一覧に追加される()
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create([
+            'name' => '購入した商品',
+            'status' => 'on_sale',
+            ]);
+
+        $this->actingAs($user)->get("purchase/success/{$item->id}");
+
+        $response = $this->actingAs($user)->get('/mypage?tab=buy');
+
+        $response->assertStatus(200);
+        $response->assertSee('購入した商品');
+    }
+
+    // 11.支払い方法選択
+
+    /** @test */
+    public function 支払い方法選択_小計画面で変更が反映される()
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create(['price' => 5000]);
+
+        $response = $this->actingAs($user)->get("/purchase/{$item->id}");
+
+        $response->assertStatus(200);
+
+        $checkoutResponse = $this->actingAs($user)->post("/purchase/{$item->id}", [
+            'payment_method' => 'konbini'
         ]);
 
-        $response->assertSessionHasErrors(['content']);
+        $checkoutResponse->assertStatus(302);
+    }
+
+    // 12.配送先変更
+
+    /** @test */
+    public function 配送先変更_送付先住所変更画面にて登録した住所が商品購入画面に反映されている()
+    {
+        $user = User::factory()->create();
+        $user->profile()->create([
+            'postcode' => '123-4567',
+            'address' => '富山県富山市',
+            'building' => 'マルート',
+        ]);
+        $item = Item::factory()->create();
+
+        $response = $this->actingAs($user)->post("/purchase/address/{$item->id}", [
+            'postcode' => '765-4321',
+            'address' => '石川県金沢市',
+            'building' => 'フォーラス',
+        ]);
+
+        $response->assertRedirect("/purchase/{$item->id}");
+
+        $purchaseResponse = $this->actingAs($user)->get("/purchase/{$item->id}");
+
+        $purchaseResponse->assertStatus(200);
+        $purchaseResponse->assertSee('765-4321');
+        $purchaseResponse->assertSee('石川県金沢市');
+        $purchaseResponse->assertSee('フォーラス');
+    }
+
+    /** @test */
+    public function 配送先変更_購入した商品に送付先住所が紐づいて登録される()
+    {
+        $user = User::factory()->create();
+        $user->profile()->create([
+            'postcode' => '123-4567',
+            'address' => '富山県富山市',
+            'building' => 'マルート',
+        ]);
+        $item = Item::factory()->create();
+
+        $this->actingAs($user)->post("/purchase/address/{$item->id}", [
+            'postcode' => '765-4321',
+            'address' => '石川県金沢市',
+            'building' => 'フォーラス',
+        ]);
+
+        $this->actingAs($user)->get("purchase/success/{$item->id}");
+
+        $this->assertDatabaseHas('orders',[
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+        ]);
+        $this->assertDatabaseHas('profiles',[
+            'user_id' => $user->id,
+            'postcode' => '765-4321',
+            'address' => '石川県金沢市',
+            'building' => 'フォーラス'
+        ]);
+    }
+
+    // 13.ユーザー情報取得
+
+    /** @test */
+    public function ユーザー情報取得_必要な情報が取得できる()
+    {
+        $user = User::factory()->create(['name' => 'テスト太郎']);
+        $user->profile()->create([
+            'postcode' => '111-1111',
+            'address' => '新潟県新潟市',
+            'building' => '朱鷺メッセ',
+            'image_url' => 'profiles/test_avatar.jpeg'
+        ]);
+
+        $mySellItem = Item::factory()->create([
+            'user_id' => $user->id,
+            'name' => '出品した本',
+        ]);
+        $myBuyItem = Item::factory()->create(['name' => '購入した時計']);
+        $myBuyItem->order()->create(['user_id' => $user->id]);
+
+        $response = $this->actingAs($user)->get('/mypage');
+
+        $response->assertStatus(200);
+        $response->assertSee('テスト太郎');
+        $response->assertSee('test_avatar.jpeg');
+        $response->assertSee('出品した本');
+
+        $buyTabResponse = $this->actingAs($user)->get('/mypage?tab=buy');
+        $buyTabResponse->assertSee('購入した時計');
+    }
+
+    // ユーザー情報変更
+
+    /** @test */
+    public function ユーザー情報取得_変更項目が初期値として過去設定されていること()
+    {
+        $user = User::factory()->create(['name' => 'テスト太郎']);
+        $user->profile()->create([
+            'postcode' => '111-1111',
+            'address' => '新潟県新潟市',
+            'building' => '朱鷺メッセ',
+            'image_url' => 'profiles/test_avatar.jpeg'
+        ]);
+
+        $response = $this->actingAs($user)->get('/mypage/profile');
+
+        $response->assertStatus(200);
+        $response->assertSee('value="テスト太郎"', false);
+        $response->assertSee('value="111-1111"', false);
+        $response->assertSee('value="新潟県新潟市"', false);
+        $response->assertSee('value="朱鷺メッセ"', false);
+        $response->assertSee('test_avatar.jpeg');
+    }
+
+    // 15.出品情報登録
+
+    /** @test */
+    public function 出品情報取得_商品出品画面にて必要な情報が保存できること()
+    {
+        $user = User::factory()->create();
+        $category = Category::create(['name' => 'メンズ']);
+        $condition = Condition::create(['name' => 'やや傷や汚れあり']);
+
+        app('migrator');
+        $dummyImage = \Illuminate\Http\UploadedFile::fake()->create('exhibition_item.jpeg', 100);
+
+        $response = $this->actingAs($user)->post('/sell', [
+            'image' => $dummyImage,
+            'categories' => [$category->id],
+            'condition_id' => $condition->id,
+            'name' => 'ビンテージジャケット',
+            'brand' => '古着シャネル',
+            'description' => '状態の良いレトロなジャケットです。',
+            'price' => 35000,
+        ]);
+
+        $response->assertRedirect('/mypage');
+
+        $this->assertDatabaseHas('items', [
+            'user_id' => $user->id,
+            'condition_id' => $condition->id,
+            'name' => 'ビンテージジャケット',
+            'brand' => '古着シャネル',
+            'description' => '状態の良いレトロなジャケットです。',
+            'price' => 35000,
+            'status' => 'on_sale'
+        ]);
+
+        $item = Item::where('name', 'ビンテージジャケット')->first();
+        $this->assertTrue($item->categories->contains($category->id));
     }
 }
 
