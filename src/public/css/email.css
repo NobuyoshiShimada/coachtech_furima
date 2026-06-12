@@ -1,0 +1,72 @@
+.email-auth {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 50px;
+    text-align: center;
+    font-family: 'Helvetica Neue', Arial, sana-serif;
+    box-sizing: border-box;
+}
+
+.email-auth__text {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.8;
+    color: #000000;
+    margin-bottom: 40px;
+}
+
+.email-auth__action {
+    margin-bottom: 40px;
+}
+
+.email-auth__button {
+    background-color: #d3d3d3;
+    color: #000000;
+    font-size: 16px;
+    font-weight: bold;
+    border: 1px solid #999999;
+    border-radius: 6px;
+    padding: 12px 35px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.email-auth__button:hover {
+    background-color: #c5c5c5c5;
+}
+
+.resend-form {
+    display: inline-block;
+}
+
+.resend-link__button {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-size: 14px;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.resend-link__button:hover {
+    color: #1d4ed8;
+}
+
+/* レスポンシブ（スマホサイズ以下） */
+@media screen and (max-width: 768px) {
+    .verify-container {
+        padding: 60px 20px;
+    }
+
+    .verify-text {
+        font-size: 14px;
+    }
+
+    .verify-btn {
+        width: 100%; /* スマホではボタンを横幅いっぱいに広げる */
+        box-sizing: border-box;
+    }
+}
