@@ -1,0 +1,6 @@
+{
+    "editor.formatOnSave": true,
+    "files.autoSave": "afterDelay",
+    "editor.defaultFormatter": "shufo.vscode-blade-formatter",
+    "editor.wordWrap": "on"
+}
