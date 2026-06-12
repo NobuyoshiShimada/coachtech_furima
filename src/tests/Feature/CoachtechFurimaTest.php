@@ -159,7 +159,7 @@ class CoachtechFurimaTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
-    // ログアウト機能
+    // 3.ログアウト機能
 
     /** @test */
     public function ログアウトができる()
@@ -171,7 +171,7 @@ class CoachtechFurimaTest extends TestCase
         $this->assertGuest();
     }
 
-    // 商品一覧取得
+    // 4.商品一覧取得
 
     /** @test */
     public function 商品一覧_全商品を取得できる()
@@ -230,7 +230,7 @@ class CoachtechFurimaTest extends TestCase
         $response->assertSee('他人の出品物');
     }
 
-    // マイリスト一覧取得
+    // 5.マイリスト一覧取得
 
     /** @test */
     public function マイリスト_いいねした商品だけが表示される()
@@ -309,7 +309,7 @@ class CoachtechFurimaTest extends TestCase
         $response->assertSee('value="スニーカー"', false);
     }
 
-    // 6.商品詳細情報
+    // 7.商品詳細情報
 
     /** @test */
     public function 商品詳細情報_必要な情報が表示される()
