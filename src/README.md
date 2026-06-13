@@ -58,8 +58,9 @@ php artisan db:seed
 - nginx 1.21.1
 
 ## ER図
-![alt](test_coachtech_furima_.png)
+![alt](coachtech_furima_.png)
 
 ## URL
 - 開発環境：http://localhost/products
 - phpMyAdmin:：http://localhost:8080/
+- Mailpit:http://localhost:8025

@@ -20,6 +20,7 @@ use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
+use Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -90,12 +91,16 @@ class FortifyServiceProvider extends ServiceProvider
             };
         });
 
+        Fortify::verifyEmailView(function () {
+            return view('auth.email');
+        });
+
         $this->app->singleton(RegisterResponseContract::class, function () {
             return new class implements RegisterResponseContract {
                 public function toResponse($request)
                 {
                     // ➔ 新しくアカウントを作った直後は、プロフィール編集画面へ直行させます
-                    return redirect()->route('profile.edit');
+                    return redirect()->route('verification.notice');
                 }
             };
         });

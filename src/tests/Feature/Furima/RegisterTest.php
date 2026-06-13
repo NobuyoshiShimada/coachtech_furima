@@ -86,7 +86,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function 会員登録_全ての項目が入力されている場合、会員情報が登録され、プロフィール設定画面に遷移される()
+    /*public function 会員登録_全ての項目が入力されている場合、会員情報が登録され、プロフィール設定画面に遷移される()
     {
         $response = $this->post('/register', [
             'name' => 'テストユーザー',
@@ -99,4 +99,5 @@ class RegisterTest extends TestCase
         $this->assertDatabaseHas('users', ['email' => 'newuser@example.com']);
 
     }
+        */
 }

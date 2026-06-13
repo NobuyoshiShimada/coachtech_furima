@@ -1,7 +1,7 @@
 .email-auth {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 100px 50px;
+    padding: 250px 50px;
     text-align: center;
     font-family: 'Helvetica Neue', Arial, sana-serif;
     box-sizing: border-box;
@@ -12,7 +12,7 @@
     font-weight: bold;
     line-height: 1.8;
     color: #000000;
-    margin-bottom: 40px;
+    padding-bottom: 50px;
 }
 
 .email-auth__action {
@@ -26,10 +26,11 @@
     font-weight: bold;
     border: 1px solid #999999;
     border-radius: 6px;
-    padding: 12px 35px;
+    padding: 16px 35px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     cursor: pointer;
     transition: background-color 0.2s;
+    text-decoration: none;
 }
 
 .email-auth__button:hover {
@@ -47,8 +48,9 @@
     font-size: 14px;
     text-decoration: underline;
     cursor: pointer;
-    padding: 0;
+    padding-top: 40px;
     transition: color 0.2s;
+    text-decoration: none;
 }
 
 .resend-link__button:hover {

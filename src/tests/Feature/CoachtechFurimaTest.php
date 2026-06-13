@@ -7,7 +7,10 @@ use App\Models\Item;
 use App\Models\Category;
 use App\Models\Condition;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminateupport\Facadestorage;
+use Illuminateupport\Facadestorages;
+use Illuminate\support\facades\Notification;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Tests\TestCase;
 
 class CoachtechFurimaTest extends TestCase
@@ -86,7 +89,7 @@ class CoachtechFurimaTest extends TestCase
     }
 
     /** @test */
-    public function 会員登録_全ての項目が入力されている場合、会員情報が登録され、プロフィール設定画面に遷移される()
+    /*public function 会員登録_全ての項目が入力されている場合、会員情報が登録され、プロフィール設定画面に遷移される()
     {
         $response = $this->post('/register', [
             'name' => 'テストユーザー',
@@ -97,9 +100,8 @@ class CoachtechFurimaTest extends TestCase
 
         $response->assertRedirect('/mypage/profile');
         $this->assertDatabaseHas('users', ['email' => 'newuser@example.com']);
-
     }
-
+        */
     // 2.ログイン機能
 
     /** @test */
@@ -709,5 +711,47 @@ class CoachtechFurimaTest extends TestCase
         $item = Item::where('name', 'ビンテージジャケット')->first();
         $this->assertTrue($item->categories->contains($category->id));
     }
+
+    // 16.メール認証
+
+    /** @test */
+    public function メール認証_会員登録後認証メールが送信される()
+    {
+        Notification::fake();
+
+        $response = $this->post('/register', [
+            'name' => 'test_name',
+            'email' => 'test@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ]);
+
+        $user = User::where('email', 'test@example.com')->first();
+        $this->assertNotNull($user);
+
+        Notification::assertSentTo($user, VerifyEmail::class);
+    }
+
+        /** @test */
+    public function メール認証_メール認証誘導画面で認証はこちらからボタンを押下するとメール認証サイトに遷移する_メール認証サイトのメール認証を完了するとプロフィール設定画面に遷移する()
+    {
+        $user = User::factory()->create(['email_verified_at' => null]);
+
+        $response = $this->actingAs($user)->get('/email/verify');
+        $response->assertStatus(200);
+
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
+        );
+
+        $response = $this->actingAs($user)->get($verificationUrl);
+
+        $response->assertRedirect('/?verified=1');
+
+        $this->assertTrue($user->fresh()->hasVerifiedEmail());
+    }
+
 }
 

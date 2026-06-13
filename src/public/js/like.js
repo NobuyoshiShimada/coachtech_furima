@@ -11,17 +11,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        // 💡 Fetch API を使ってリロードなしでLaravelへPOST送信
+        //  Fetch API を使ってリロードなしでLaravelへPOST送信
         fetch(`/items/${itemId}/like`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // LaravelのPOST送信に絶対必要なCSRFトークンをヘッダーに乗せます
                 'X-CSRF-TOKEN': csrf_token
             }
         })
         .then(response => {
-            // ログイン切れなどでエラーが起きた場合はログイン画面へ飛ばします
             if (response.status === 401) {
                 window.location.href = '/login';
                 return;
@@ -31,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (!data) return;
 
-            // 💡 コントローラーから返ってきた最新データを元に、画面をリアルタイム書き換え！
+            //  コントローラーから返ってきた最新データを元に、画面をリアルタイム書き換え
             if (data.isLiked) {
                 // いいね登録された場合：ハートを「赤」に染める
                 this.classList.add('action-buttons__btn--active');

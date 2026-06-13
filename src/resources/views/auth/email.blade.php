@@ -11,10 +11,10 @@
         </p>
 
         <div class="email-auth__action">
-            <button type="button" class="email-auth__button">認証はこちらから</button>
+            <a href="http://localhost:8025" target="_blank" rel="noopener noreferrer" class="email-auth__button">認証はこちらから</a>
         </div>
 
-        <form class="resend-form" method="POST" action="{{ route('email.send') }}">
+        <form class="resend-form" method="POST" action="{{ route('verification.send') }}">
             @csrf
             <button type="submit" class="resend-link__button">認証メールを再送する</button>
         </form>
