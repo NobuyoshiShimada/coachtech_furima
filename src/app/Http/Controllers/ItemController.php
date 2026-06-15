@@ -12,7 +12,6 @@ use App\Models\Condition;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
-use Stripe\Checkout\Session;
 
 class ItemController extends Controller
 {

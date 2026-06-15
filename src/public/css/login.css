@@ -67,4 +67,27 @@
     color: #00f;
 }
 
+@media screen and (max-width: 768px) {
+    .login {
+        padding-top: 40px;
+    }
 
+    .login__title {
+        padding-bottom: 25px;
+        font-size: 22px;
+    }
+
+    .login__form {
+        width: 90%;
+        max-width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .btn__submit {
+        margin-top: 40px;
+        padding: 13px;
+    }
+}

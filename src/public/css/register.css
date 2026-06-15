@@ -67,4 +67,27 @@
     color: #00f;
 }
 
+@media screen and (max-width: 768px) {
+    .register {
+        padding-top: 40px;
+    }
 
+    .register__title {
+        padding-bottom: 25px;
+        font-size: 22px;
+    }
+
+    .register__form {
+        width: 90%;
+        max-width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .btn__submit {
+        margin-top: 40px;
+        padding: 13px;
+    }
+}

@@ -7,6 +7,9 @@ use App\Http\Controllers\LoginController;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\AddressRequest;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use Laravel\Fortify\Http\Controllers\RegisteredUserController;
+use App\Models\User;
+use App\Http\Controllers\CustomVerifyEmailController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,12 +44,42 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::post('/sell', [ItemController::class, 'store'])->name('sell.store');
 });
 
-// Route::get('items/create',fn() => 'Listing Page')->name('items.create');
-
 Route::get('/', [ItemController::class,'index'])->name('item.index');
 
 Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show');
 
-Route::post('/login', function (LoginRequest $request) {
-    return app(AuthenticatedSessionController::class)->store($request);
-    });
+// メール認証誘導画面（email.blade.php）
+Route::get('/email/verify', function () {
+    if (!session()->has('auth.verify.user_id')){
+        auth()->logout();
+        session()->flush();
+        return redirect()->route('item.index');
+    }
+    return view('auth.email');
+})->name('verification.notice');
+
+// メールのURLがクリックされたとき
+Route::get('/email/verify/{id}/{hash}', CustomVerifyEmailController::class)
+    ->middleware(['signed'])
+    ->name('verification.verify');
+
+// ログイン画面を表示する
+Route::get('/login', function () {
+    // Fortify::authenticateUsingで弾かれた未認証エラーを直接セッションから見抜きます。
+    if (session()->get('errors') && session()->get('errors')->has('email')) {
+        if (session()->get('errors')->first('email') === 'redirect_to_verify') {
+
+            // 証拠を刻んで、メール認証誘導画面へ
+            session(['auth.verify.redirect_now' => true]);
+            return redirect()->route('verification.notice');
+        }
+    }
+
+    if (session()->has('auth.verify.redirect_now')) {
+        return redirect()->route('verification.notice');
+    }
+    return view('auth.login');
+})->name('login');
+
+// ログインボタンが押されたときの処理（POST）
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);

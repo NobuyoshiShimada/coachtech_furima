@@ -216,7 +216,8 @@
     margin-bottom: 10px;
 }
 
-.comment-item__avatar {
+.comment-item__avatar
+.comment-item__avatar-img {
     width: 36px;
     height: 36px;
     background-color: #cccccc;
@@ -240,7 +241,7 @@
 .comment-form__textarea {
     width: 100%;
     padding: 12px;
-    border: 1px solid #999999;
+    border: 1px solid #cccccc;
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 15px;
@@ -259,6 +260,7 @@
     border-radius: 4px;
     cursor: pointer;
     transition: opacity 0.3s;
+    text-decoration: none;
 }
 
 .comment-form__submit-btn:hover {

@@ -136,6 +136,20 @@
     border-radius: 4px;
     overflow: hidden;
     margin-bottom: 12px;
+    position: relative;
+}
+
+.item-card__sold-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #ff0000;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 12px;
+    border-bottom-right-radius: 4px;
+    z-index: 10;
 }
 
 .item-card__image-placeholder {
@@ -163,20 +177,53 @@
     }
 
     .user-profile__inner {
-        flex-direction: column;  /* スマホ画面では縦並びに切り替え */
+        flex-direction: column;
         gap: 25px;
         padding: 0 20px;
         text-align: center;
     }
 
     .user-profile__info {
-        flex-direction: column;  /* アバターの下にユーザー名が来るように縦並び */
+        flex-direction: column;
         gap: 15px;
     }
 
     .user-profile__edit-btn {
-        width: 100%;             /* スマホではボタンを横幅いっぱいに広げる */
+        width: 100%;
         box-sizing: border-box;
         text-align: center;
+    }
+
+    .tab-nav__inner {
+        padding: 15px 20px 0 20px;
+        gap: 20px;
+        justify-content: space-around;
+    }
+
+    .tab-nav__link {
+        font-size: 14px;
+        flex: 1;
+        text-align: center;
+    }
+
+    .item-grid {
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 15px;
+        row-gap: 20px;
+        padding: 0 20px 30px 20px;
+    }
+
+    .item-grid__empty {
+        grid-column: 1/-1;
+        text-align: center;
+        font-size: 15px;
+        padding: 30px 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .item-card__name {
+        font-size: 14px;
+        margin-top: 8px;
     }
 }

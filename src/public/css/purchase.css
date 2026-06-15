@@ -172,3 +172,63 @@
     font-size: 14px;
     margin: 10px 0 0 70px;
 }
+
+@media screen and (max-width: 768px) {
+    .purchase-page {
+        padding: 40px 0;
+    }
+
+    .purchase-page__inner {
+        flex-direction: column;
+        gap: 40px;
+        padding: 0  20px;
+    }
+
+    .purchase-main {
+        width: 100%;
+    }
+
+    .purchase-item {
+        gap: 20px;
+    }
+
+    .purchase-item__image {
+        width: 35%;
+    }
+
+    .purchase-item__name {
+        font-size: 18px;
+    }
+
+    .purchase-item__price {
+        font-size: 20px;
+    }
+
+    .purchase-section__title {
+        margin-left: 0;
+    }
+
+    .purchase-select {
+        width: 100%;
+        margin-left: 0;
+        box-sizing: border-box;
+    }
+
+    .shipping-address__text {
+        margin-left: 0;
+        font-size: 14px;
+    }
+
+    .form-group__error {
+        margin: 10px 0 0 0;
+    }
+
+    .purchase-side {
+        width: 100%;
+    }
+
+    .summary-table__cell {
+        padding: 20px 15px;
+        font-size: 14px;
+    }
+}

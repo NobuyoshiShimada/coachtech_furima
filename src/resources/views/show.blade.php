@@ -136,7 +136,7 @@
                     <div class="detail-info">
                         <div class="detail-info__label">商品の状態</div>
                         <div class="detail-info__value">
-                            {{ $item->condition->name ?? '未設定' }}
+                            {{ $item->condition->name ?? 0 }}
                         </div>
                     </div>
                 </section>
@@ -149,7 +149,11 @@
                         @forelse ($item->comments as $comment)
                             <div class="comment-item">
                                 <div class="comment-item__user">
-                                    <div class="comment-item__avatar"></div>
+                                    <div class="comment-item__avatar">
+                                        @if ($comment->user->profile && $comment->user->profile->image_url)
+                                        <img src="{{ asset('storage/' . $comment->user->profile->image_url) }}" alt="avatar" class="comment-item__avatar-img">
+                                        @endif
+                                    </div>
                                     <span class="comment-item__username">{{ $comment->user->name }}</span>
                                 </div>
                                 <div class="comment-item__content">{{ $comment->content }}

@@ -737,7 +737,10 @@ class CoachtechFurimaTest extends TestCase
     {
         $user = User::factory()->create(['email_verified_at' => null]);
 
-        $response = $this->actingAs($user)->get('/email/verify');
+        $response = $this->actingAs($user)
+        ->withSession(['auth.verify.user_id' => $user->id])
+        ->get('/email/verify');
+
         $response->assertStatus(200);
 
         $verificationUrl = URL::temporarySignedRoute(
@@ -748,7 +751,7 @@ class CoachtechFurimaTest extends TestCase
 
         $response = $this->actingAs($user)->get($verificationUrl);
 
-        $response->assertRedirect('/?verified=1');
+        $response->assertRedirect('/mypage/profile');
 
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
     }

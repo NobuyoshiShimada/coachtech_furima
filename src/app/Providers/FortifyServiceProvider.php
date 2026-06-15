@@ -17,10 +17,10 @@ use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
+use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
-use Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface;
+use Laravel\Fortify\Contracts\VerifyEmailResponse as VerifyEmailResponseContract;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -52,14 +52,8 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
 
-        // 会員登録画面の指定
         Fortify::registerView(function () {
             return view('auth.register');
-        });
-
-        // ログイン画面の指定
-        Fortify::loginView(function () {
-            return view('auth.login');
         });
 
         //認証処理
@@ -67,6 +61,13 @@ class FortifyServiceProvider extends ServiceProvider
             $user = User::where('email', $request->email)->first();
 
             if ($user && Hash::check($request->password, $user->password)) {
+                if (!$user->hasVerifiedEmail()) {
+                    session(['auth.verify.user_id' => $user->id]);
+
+                    throw ValidationException::withMessages([
+                        'email' => ['redirect_to_verify'],
+                    ]);
+                    }
                 return $user;
             }
 
@@ -76,11 +77,11 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(\Laravel\Fortify\Contracts\LoginResponse::class, function () {
-            return new class implements \Laravel\Fortify\Contracts\LoginResponse {
+            return new class implements \Laravel\Fortify\Contracts\LoginResponse
+            {
                 public function toResponse($request)
                 {
                     $user = $request->user();
-                    // プロフィール入力済み
                     if ($user->profile && $user->profile->postcode) {
                         return redirect('/?tab=mylist');
                         }
@@ -99,8 +100,22 @@ class FortifyServiceProvider extends ServiceProvider
             return new class implements RegisterResponseContract {
                 public function toResponse($request)
                 {
-                    // ➔ 新しくアカウントを作った直後は、プロフィール編集画面へ直行させます
+                    $user = $request->user();
+                    session(['auth.verify.user_id' => $user->id]);
+                    auth()->logout();
+
                     return redirect()->route('verification.notice');
+                }
+            };
+        });
+
+        $this->app->singleton(VerifyEmailResponseContract::class, function() {
+            return new class implements VerifyEmailResponseContract {
+                public function toResponse($request) {
+                    session()->forget(['auth.verify.user_id', 'auth.verify.redirect_now']);
+                    auth()->login($request->user());
+
+                    return redirect('/mypage/profile');
                 }
             };
         });
