@@ -79,7 +79,7 @@ php artisan storage:link
 - Stripe（テスト環境決済）
 
 ## ER図
-![alt](coachtech_furima_.png)
+![alt](coachtech_furima.png)
 
 ## URL
 - 開発環境：http://localhost/products
