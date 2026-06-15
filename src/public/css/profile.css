@@ -115,7 +115,7 @@
     opacity: 0.8;
 }
 
-/* モバイル用 max-width:768px*/
+/* スマートフォン用 max-width:768px*/
 @media screen and (max-width: 768px) {
     .profile {
         padding-top: 40px;

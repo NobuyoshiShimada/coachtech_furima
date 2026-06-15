@@ -12,13 +12,9 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
-use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Laravel\Fortify\Contracts\LoginResponse;
-use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use Laravel\Fortify\Contracts\VerifyEmailResponse as VerifyEmailResponseContract;
 
@@ -112,7 +108,7 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(VerifyEmailResponseContract::class, function() {
             return new class implements VerifyEmailResponseContract {
                 public function toResponse($request) {
-                    session()->forget(['auth.verify.user_id', 'auth.verify.redirect_now']);
+                    session()->forget(['auth.verify.user_id']);
                     auth()->login($request->user());
 
                     return redirect('/mypage/profile');

@@ -5,11 +5,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LoginController;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\AddressRequest;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
-use App\Models\User;
 use App\Http\Controllers\CustomVerifyEmailController;
+use Illuminate\Auth\Events\Login;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,7 +21,6 @@ use App\Http\Controllers\CustomVerifyEmailController;
 |
 */
 
-// Route::get('/register', [RegisterController::class, 'showRegistrationForm']);
 Route::middleware(['auth', 'verified'])->group(function() {
 
     Route::get('/mypage/profile',[ProfileController::class, 'edit'])->name('profile.edit');
@@ -33,8 +32,6 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
     Route::get('purchase/address/{item}', [ItemController::class, 'editAddress'])->name('address.edit');
     Route::post('purchase/address/{item}', [ItemController::class, 'updateAddress'])->name('address.update');
-    Route::get('/?tab=mylist', function() {
-    })->name('mylist');
     Route::post('/purchase/{item}', [ItemController::class, 'checkout'])->name('item.checkout');
     Route::get('purchase/success/{item}', [ItemController::class, 'success'])->name('purchase.success');
     Route::get('purchase/cancel/{item}', [ItemController::class, 'cancel'])->name('purchase.cancel');
@@ -51,9 +48,10 @@ Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show')
 // メール認証誘導画面（email.blade.php）
 Route::get('/email/verify', function () {
     if (!session()->has('auth.verify.user_id')){
-        auth()->logout();
-        session()->flush();
         return redirect()->route('item.index');
+    }
+     if (!auth()->check()) {
+        auth()->loginUsingId(session('auth.verify.user_id'));
     }
     return view('auth.email');
 })->name('verification.notice');
@@ -81,5 +79,5 @@ Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
-// ログインボタンが押されたときの処理（POST）
+// ログインボタンが押されたとき
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);

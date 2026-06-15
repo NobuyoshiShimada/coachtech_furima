@@ -170,7 +170,7 @@
 }
 
 
-/* レスポンシブ768px以下 */
+/* スマートフォン用 max-width:768px*/
 @media screen and (max-width: 768px) {
     .user-profile {
         padding: 30px 0;

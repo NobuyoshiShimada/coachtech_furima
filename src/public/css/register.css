@@ -67,6 +67,7 @@
     color: #00f;
 }
 
+/* スマートフォン用 max-width:768px*/
 @media screen and (max-width: 768px) {
     .register {
         padding-top: 40px;

@@ -273,7 +273,7 @@
     margin-bottom: 15px;
 }
 
-/* レスポンシブ(768px以下) */
+/* スマートフォン用 max-width:768px*/
 @media screen and (max-width: 768px) {
     .item-detail__inner {
         flex-direction: column;

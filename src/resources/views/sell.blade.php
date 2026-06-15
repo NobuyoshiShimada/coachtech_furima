@@ -65,9 +65,8 @@
                 <label class="form-group__label">カテゴリー</label>
                 <div class="category-grid">
                     @foreach ($categories as $category)
-                        <label class="category-item">
-                            <input type="checkbox" name="categories[]" value="{{ $category->id }}"
-                                class="category-item__checkbox"
+                        <label class="category-item" for="category_{{ $category->id }}">
+                            <input type="checkbox" name="categories[]" value="{{ $category->id }}" id="category_{{ $category->id }}" class="category-item__checkbox"
                                 {{ is_array(old('categories')) && in_array($category->id, old('categories')) ? 'checked' : '' }}>
                             <span class="category-item__badge">{{ $category->name }}</span>
                         </label>

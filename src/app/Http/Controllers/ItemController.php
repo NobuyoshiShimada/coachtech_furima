@@ -192,7 +192,7 @@ class ItemController extends Controller
             'brand' => $request->brand ?? '' ,
             'price' => $request->price,
             'description' => $request->description,
-            'image_url' => asset('storage/' . $path),
+            'image_url' => $path,
             'status' => 'on_sale',
         ]);
 

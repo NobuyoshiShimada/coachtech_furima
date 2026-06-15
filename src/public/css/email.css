@@ -1,7 +1,7 @@
 .email-auth {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 250px 50px;
+    padding: 200px 50px;
     text-align: center;
     font-family: 'Helvetica Neue', Arial, sana-serif;
     box-sizing: border-box;
@@ -57,7 +57,7 @@
     color: #1d4ed8;
 }
 
-/* レスポンシブ（スマホサイズ以下） */
+/* スマートフォン用 max-width:768px*/
 @media screen and (max-width: 768px) {
     .verify-container {
         padding: 60px 20px;

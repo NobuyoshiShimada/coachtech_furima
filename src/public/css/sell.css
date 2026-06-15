@@ -71,9 +71,15 @@
 
 .category-item__checkbox {
     position: absolute;
+    white-space: nowrap;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    border: 0;
+    padding: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
     opacity: 0;
-    width: 0;
-    height: 0;
 }
 
 .category-item__badge {
@@ -86,13 +92,16 @@
     border-radius: 20px;
     transition: all 0.2s ease;
     user-select: none;
+    pointer-events: none;
 }
 
-.category-item:hover
-.category-item__badge {
-    background-color: #ff5555;
-    border-color: #999999;
-    color: #ffffff;
+@media (hover: hover) {
+    .category-item:hover
+    .category-item__badge {
+        background-color: #ff5555;
+        border-color: #999999;
+        color: #ffffff;
+    }
 }
 
 .category-item__checkbox:checked +
@@ -122,7 +131,7 @@
 
 .sell-price
 .form-group__input {
-    padding-left: 35px !important;
+    padding-left: 35px;
     box-sizing: border-box;
 }
 
@@ -136,4 +145,58 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
-.
+/* スマートフォン用 max-width:768px*/
+@media screen and (max-width: 768px) {
+    .sell-container {
+        padding: 20px 15px;
+    }
+
+    .sell-title {
+        font-size: 16px;
+        margin: 30px 0 15px 0;
+    }
+
+    .image-upload-box {
+        height: 100px;
+    }
+
+    .image-upload-box__button {
+        padding: 6px 18px;
+        font-size: 13px;
+    }
+
+    .preview-img {
+        max-height: 200px;
+    }
+
+    .category-grid {
+        gap: 8px;
+    }
+
+    .category-item__badge {
+        padding: 5px 12px;
+        font-size: 12px;
+    }
+
+    .form-group__input,
+    select.form-group__input,
+    textarea {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .sell-price .form-group__input {
+        padding-left: 30px;
+    }
+
+    .sell-price__yen {
+        left: 12px;
+        font-size: 14px;
+    }
+
+    button[type="submit"] {
+        padding: 12px;
+        font-size: 15px;
+    }
+}
+

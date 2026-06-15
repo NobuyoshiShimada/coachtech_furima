@@ -173,6 +173,7 @@
     margin: 10px 0 0 70px;
 }
 
+/* スマートフォン用 max-width:768px*/
 @media screen and (max-width: 768px) {
     .purchase-page {
         padding: 40px 0;
